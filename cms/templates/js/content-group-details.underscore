@@ -1,11 +1,11 @@
-<div class="collection-details wrapper-group-configuration">
-    <header class="collection-header group-configuration-header">
-        <h3 class="title group-configuration-title">
+<div class="collection-details">
+    <header class="collection-header">
+        <h3 class="title">
             <%- name %>
         </h3>
     </header>
 
-    <ul class="actions group-configuration-actions">
+    <ul class="actions">
         <li class="action action-edit">
             <button class="edit"><i class="icon fa fa-pencil"></i> <%= gettext("Edit") %></button>
         </li>

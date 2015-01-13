@@ -21,6 +21,8 @@ define([
             'click .new-button': 'onAddItem'
         },
 
+        listContainerCss: '.list-items',
+
         initialize: function() {
             this.listenTo(this.collection, 'add', this.addNewItemView);
             this.listenTo(this.collection, 'remove', this.onRemoveItem);
@@ -40,7 +42,7 @@ define([
             }));
 
             this.collection.each(function(model) {
-                this.$('.content-groups').append(this.createItemView({model: model}).render().el);
+                this.$(this.listContainerCss).append(this.createItemView({model: model}).render().el);
             }, this);
 
             return this;
@@ -71,7 +73,7 @@ define([
             // If items already exist, just append one new.
             // Otherwise re-render the empty list HTML.
             if (this.collection.length > 1) {
-                this.$('.content-groups').append(view.render().el);
+                this.$(this.listContainerCss).append(view.render().el);
             } else {
                 this.render();
             }

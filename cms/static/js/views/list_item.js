@@ -5,6 +5,7 @@
  * Subclasses must implement:
  * - itemDisplayName (string): Display name for the list item.
  *   Must be translated.
+ * - baseClassName (string): CSS class name representing the item.
  * - createEditView (function): Render and append the edit view to the
  *   DOM.
  * - createDetailsView (function): Render and append the details view
@@ -30,9 +31,10 @@ define([
 
             return [
                 'wrapper-collection',
-                'group-configuration',
-                'group-configurations-list-item',
-                'group-configurations-list-item-' + index
+                'wrapper-collection-' + index,
+                this.baseClassName,
+                this.baseClassName + 's-list-item',
+                this.baseClassName + 's-list-item-' + index
             ].join(' ');
         },
 
