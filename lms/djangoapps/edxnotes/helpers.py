@@ -107,15 +107,27 @@ def send_request(user, course_id, path="", query_string=None):
     return response
 
 
+def get_parent_xblock(xblock):
+    """
+    Returns the xblock that is the parent of the specified xblock, or None if it has no parent.
+    """
+    locator = xblock.location
+    parent_location = modulestore().get_parent_location(locator)
+
+    if parent_location is None:
+        return None
+    return modulestore().get_item(parent_location)
+
+
 def get_parent_unit(xblock):
     """
     Find vertical that is a unit, not just some container.
     """
     while xblock:
-        xblock = xblock.get_parent()
+        xblock = get_parent_xblock(xblock)
         if xblock is None:
             return None
-        parent = xblock.get_parent()
+        parent = get_parent_xblock(xblock)
         if parent is None:
             return None
         if parent.category == 'sequential':
@@ -169,7 +181,7 @@ def preprocess_collection(user, course, collection):
                 log.debug("Unit not found: %s", usage_key)
                 continue
 
-            section = unit.get_parent()
+            section = get_parent_xblock(unit)
             if not section:
                 log.debug("Section not found: %s", usage_key)
                 continue
@@ -183,7 +195,7 @@ def preprocess_collection(user, course, collection):
                 filtered_collection.append(model)
                 continue
 
-            chapter = section.get_parent()
+            chapter = get_parent_xblock(section)
             if not chapter:
                 log.debug("Chapter not found: %s", usage_key)
                 continue
@@ -219,8 +231,8 @@ def get_module_context(course, item):
         'display_name': item.display_name_with_default,
     }
 
-    if item.category == 'chapter' and item.get_parent():
-        course = item.get_parent()
+    if item.category == 'chapter' and get_parent_xblock(item):
+        course = get_parent_xblock(item)
         ancestor_children = [unicode(child) for child in course.children]
         item_dict['index'] = ancestor_children.index(item_dict['location'])
     elif item.category == 'vertical':
