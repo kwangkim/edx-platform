@@ -6,6 +6,7 @@
 // +notes
 // +skip navigation
 // +utility navigation
+// +toggling utilities
 // +case - calculator spacing
 
 // +notes:
@@ -39,14 +40,13 @@
   }
 
   .utility-control {
-    @include transition(background-color $tmg-f2 ease-in-out 0s);
+    @include transition(background-color $tmg-f2 ease-in-out 0s, color $tmg-f2 ease-in-out 0s);
     position: relative;
     bottom: -6px; // needed to sync up with current rogue/more complex calc utility alignment
     display: inline-block;
     vertical-align: middle;
-    border-radius: ($baseline/10);
     padding: ($baseline/2) ($baseline*0.75) ($baseline*0.75) ($baseline*0.75);
-    background: $black-t3;
+    background: $black-t2;
     color: $white;
 
     // STATE: hover/active
@@ -56,7 +56,8 @@
 
     // STATE: is active/in use
     &.is-active {
-      background: $active-color;
+      background: $black;
+      color: $yellow;
     }
   }
 
@@ -67,11 +68,34 @@
     text-shadow: none;
     font-size: inherit;
     font-weight: inherit;
+    border-radius: 0;
 
     // STATE: hover/active
     &:hover, &:active, &:focus {
       border: none;
       box-shadow: none;
+    }
+  }
+
+  // +toggling utilities
+  // --------------------
+  .action-toggle-message {
+    @extend %t-title8;
+    @extend %t-strong;
+    position: absolute;
+    bottom: 0;
+    @include right(54px);
+    display: inline-block;
+    min-width: ($baseline*5);
+    padding: ($baseline/2) ($baseline*0.75);
+    opacity: 0;
+    background-color: $black;
+    color: $white;
+    text-align: center;
+
+    // STATE: is fleeting/temporary
+    &.is-fleeting {
+      @include animation(pulse-out $tmg-s2 ease-in-out 0);
     }
   }
 
