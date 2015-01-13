@@ -111,12 +111,27 @@ def get_parent_xblock(xblock):
     """
     Returns the xblock that is the parent of the specified xblock, or None if it has no parent.
     """
+    store = modulestore()
+    if store.request_cache is not None:
+        parent_cache = store.request_cache.data.setdefault('edxnotes-parent-cache', {})
+    else:
+        parent_cache = None
+
     locator = xblock.location
-    parent_location = modulestore().get_parent_location(locator)
+    if parent_cache and unicode(locator) in parent_cache:
+        return parent_cache[unicode(locator)]
+
+    parent_location = store.get_parent_location(locator)
 
     if parent_location is None:
         return None
-    return modulestore().get_item(parent_location)
+    xblock = store.get_item(parent_location)
+
+    if parent_cache is not None:
+        for child in xblock.children:
+            parent_cache[unicode(child)] = xblock
+
+    return xblock
 
 
 def get_parent_unit(xblock):
